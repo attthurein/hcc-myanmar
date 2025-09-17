@@ -32,10 +32,16 @@ function initPrivacyModal() {
     const showPrivacyFooterBtn = document.getElementById('show-privacy-footer');
     const closePrivacyBtn = document.getElementById('close-privacy-modal');
     
+    // Store reference to previously focused element
+    let previouslyFocusedElement = null;
+    
     // Show modal
     function showModal() {
+        // Store the currently focused element
+        previouslyFocusedElement = document.activeElement;
+        
         privacyModal.classList.add('show');
-        privacyModal.setAttribute('aria-hidden', 'false');
+        privacyModal.removeAttribute('aria-hidden');
         document.body.style.overflow = 'hidden'; // Prevent background scrolling
         
         // Focus on close button for accessibility
@@ -49,6 +55,12 @@ function initPrivacyModal() {
         privacyModal.classList.remove('show');
         privacyModal.setAttribute('aria-hidden', 'true');
         document.body.style.overflow = ''; // Restore scrolling
+        
+        // Return focus to the element that opened the modal
+        if (previouslyFocusedElement) {
+            previouslyFocusedElement.focus();
+            previouslyFocusedElement = null;
+        }
     }
     
     // Event listeners
@@ -69,6 +81,31 @@ function initPrivacyModal() {
             hideModal();
         }
     });
+    
+    // Trap focus within modal when it's open
+    privacyModal.addEventListener('keydown', (e) => {
+        if (privacyModal.classList.contains('show')) {
+            const focusableElements = privacyModal.querySelectorAll(
+                'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+            );
+            const firstElement = focusableElements[0];
+            const lastElement = focusableElements[focusableElements.length - 1];
+            
+            if (e.key === 'Tab') {
+                if (e.shiftKey) {
+                    if (document.activeElement === firstElement) {
+                        lastElement.focus();
+                        e.preventDefault();
+                    }
+                } else {
+                    if (document.activeElement === lastElement) {
+                        firstElement.focus();
+                        e.preventDefault();
+                    }
+                }
+            }
+        }
+    });
 }
 
 // Terms of Service Modal Management
@@ -77,10 +114,16 @@ function initTermsModal() {
     const showTermsBtn = document.getElementById('show-terms');
     const closeTermsBtn = document.getElementById('close-terms-modal');
     
+    // Store reference to previously focused element
+    let previouslyFocusedElement = null;
+    
     // Show modal
     function showModal() {
+        // Store the currently focused element
+        previouslyFocusedElement = document.activeElement;
+        
         termsModal.classList.add('show');
-        termsModal.setAttribute('aria-hidden', 'false');
+        termsModal.removeAttribute('aria-hidden');
         document.body.style.overflow = 'hidden'; // Prevent background scrolling
         
         // Focus on close button for accessibility
@@ -94,6 +137,12 @@ function initTermsModal() {
         termsModal.classList.remove('show');
         termsModal.setAttribute('aria-hidden', 'true');
         document.body.style.overflow = ''; // Restore scrolling
+        
+        // Return focus to the element that opened the modal
+        if (previouslyFocusedElement) {
+            previouslyFocusedElement.focus();
+            previouslyFocusedElement = null;
+        }
     }
     
     // Event listeners
@@ -113,6 +162,31 @@ function initTermsModal() {
             hideModal();
         }
     });
+    
+    // Trap focus within modal when it's open
+    termsModal.addEventListener('keydown', (e) => {
+        if (termsModal.classList.contains('show')) {
+            const focusableElements = termsModal.querySelectorAll(
+                'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+            );
+            const firstElement = focusableElements[0];
+            const lastElement = focusableElements[focusableElements.length - 1];
+            
+            if (e.key === 'Tab') {
+                if (e.shiftKey) {
+                    if (document.activeElement === firstElement) {
+                        lastElement.focus();
+                        e.preventDefault();
+                    }
+                } else {
+                    if (document.activeElement === lastElement) {
+                        firstElement.focus();
+                        e.preventDefault();
+                    }
+                }
+            }
+        }
+    });
 }
 
 // Accessibility Statement Modal Management
@@ -121,10 +195,16 @@ function initAccessibilityModal() {
     const showAccessibilityBtn = document.getElementById('show-accessibility');
     const closeAccessibilityBtn = document.getElementById('close-accessibility-modal');
     
+    // Store reference to previously focused element
+    let previouslyFocusedElement = null;
+    
     // Show modal
     function showModal() {
+        // Store the currently focused element
+        previouslyFocusedElement = document.activeElement;
+        
         accessibilityModal.classList.add('show');
-        accessibilityModal.setAttribute('aria-hidden', 'false');
+        accessibilityModal.removeAttribute('aria-hidden');
         document.body.style.overflow = 'hidden'; // Prevent background scrolling
         
         // Focus on close button for accessibility
@@ -138,6 +218,12 @@ function initAccessibilityModal() {
         accessibilityModal.classList.remove('show');
         accessibilityModal.setAttribute('aria-hidden', 'true');
         document.body.style.overflow = ''; // Restore scrolling
+        
+        // Return focus to the element that opened the modal
+        if (previouslyFocusedElement) {
+            previouslyFocusedElement.focus();
+            previouslyFocusedElement = null;
+        }
     }
     
     // Event listeners
@@ -155,6 +241,31 @@ function initAccessibilityModal() {
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape' && accessibilityModal.classList.contains('show')) {
             hideModal();
+        }
+    });
+    
+    // Trap focus within modal when it's open
+    accessibilityModal.addEventListener('keydown', (e) => {
+        if (accessibilityModal.classList.contains('show')) {
+            const focusableElements = accessibilityModal.querySelectorAll(
+                'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+            );
+            const firstElement = focusableElements[0];
+            const lastElement = focusableElements[focusableElements.length - 1];
+            
+            if (e.key === 'Tab') {
+                if (e.shiftKey) {
+                    if (document.activeElement === firstElement) {
+                        lastElement.focus();
+                        e.preventDefault();
+                    }
+                } else {
+                    if (document.activeElement === lastElement) {
+                        firstElement.focus();
+                        e.preventDefault();
+                    }
+                }
+            }
         }
     });
 }
@@ -211,17 +322,45 @@ function initLanguageSwitcher() {
     const langOptions = document.querySelectorAll('.lang-option');
     const currentLangSpan = document.querySelector('.current-lang');
     
+    // Store reference to previously focused element
+    let previouslyFocusedElement = null;
+    
     // Toggle language menu
     langToggle.addEventListener('click', (e) => {
         e.preventDefault();
         const isExpanded = langToggle.getAttribute('aria-expanded') === 'true';
-        langToggle.setAttribute('aria-expanded', !isExpanded);
-        langMenu.classList.toggle('show');
-        langMenu.setAttribute('aria-hidden', isExpanded);
+        
+        if (isExpanded) {
+            // Closing menu
+            langToggle.setAttribute('aria-expanded', 'false');
+            langMenu.classList.remove('show');
+            langMenu.setAttribute('aria-hidden', 'true');
+            
+            // Return focus to toggle button
+            if (previouslyFocusedElement) {
+                previouslyFocusedElement.focus();
+                previouslyFocusedElement = null;
+            } else {
+                langToggle.focus();
+            }
+        } else {
+            // Opening menu
+            previouslyFocusedElement = document.activeElement;
+            langToggle.setAttribute('aria-expanded', 'true');
+            langMenu.classList.add('show');
+            langMenu.removeAttribute('aria-hidden');
+            
+            // Focus on first language option
+            setTimeout(() => {
+                if (langOptions.length > 0) {
+                    langOptions[0].focus();
+                }
+            }, 100);
+        }
     });
     
     // Handle language selection
-    langOptions.forEach(option => {
+    langOptions.forEach((option, index) => {
         option.addEventListener('click', (e) => {
             e.preventDefault();
             const selectedLang = option.getAttribute('data-lang');
@@ -239,8 +378,32 @@ function initLanguageSwitcher() {
             langMenu.classList.remove('show');
             langMenu.setAttribute('aria-hidden', 'true');
             
+            // Return focus to toggle button
+            langToggle.focus();
+            previouslyFocusedElement = null;
+            
             // Apply language-specific formatting
             applyLanguageFormatting(selectedLang);
+        });
+        
+        // Handle keyboard navigation within menu
+        option.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                const nextIndex = (index + 1) % langOptions.length;
+                langOptions[nextIndex].focus();
+            } else if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                const prevIndex = index === 0 ? langOptions.length - 1 : index - 1;
+                langOptions[prevIndex].focus();
+            } else if (e.key === 'Escape') {
+                e.preventDefault();
+                langToggle.setAttribute('aria-expanded', 'false');
+                langMenu.classList.remove('show');
+                langMenu.setAttribute('aria-hidden', 'true');
+                langToggle.focus();
+                previouslyFocusedElement = null;
+            }
         });
     });
     
@@ -250,6 +413,23 @@ function initLanguageSwitcher() {
             langToggle.setAttribute('aria-expanded', 'false');
             langMenu.classList.remove('show');
             langMenu.setAttribute('aria-hidden', 'true');
+            
+            // Return focus to previously focused element
+            if (previouslyFocusedElement) {
+                previouslyFocusedElement.focus();
+                previouslyFocusedElement = null;
+            }
+        }
+    });
+    
+    // Handle Escape key to close menu
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && langMenu.classList.contains('show')) {
+            langToggle.setAttribute('aria-expanded', 'false');
+            langMenu.classList.remove('show');
+            langMenu.setAttribute('aria-hidden', 'true');
+            langToggle.focus();
+            previouslyFocusedElement = null;
         }
     });
     
@@ -396,19 +576,31 @@ function announceToScreenReader(message) {
 
 // Performance Monitoring
 function initPerformanceMonitoring() {
-    // Web Vitals monitoring
+    // Web Vitals monitoring - only log if performance is poor or in development
     if ('PerformanceObserver' in window) {
         const observer = new PerformanceObserver((list) => {
             for (const entry of list.getEntries()) {
                 if (entry.entryType === 'largest-contentful-paint') {
-                    console.log('LCP:', entry.startTime);
+                    const lcp = entry.startTime;
+                    // Only log if LCP is poor (> 2.5s) or in development
+                    if (lcp > 2500 || window.location.hostname === 'localhost' || window.location.protocol === 'file:') {
+                        console.log('LCP:', lcp, lcp > 2500 ? '⚠️ Poor' : '✅ Good');
+                    }
                 }
                 if (entry.entryType === 'first-input') {
-                    console.log('FID:', entry.processingStart - entry.startTime);
+                    const fid = entry.processingStart - entry.startTime;
+                    // Only log if FID is poor (> 100ms) or in development
+                    if (fid > 100 || window.location.hostname === 'localhost' || window.location.protocol === 'file:') {
+                        console.log('FID:', fid, fid > 100 ? '⚠️ Poor' : '✅ Good');
+                    }
                 }
                 if (entry.entryType === 'layout-shift') {
                     if (!entry.hadRecentInput) {
-                        console.log('CLS:', entry.value);
+                        const cls = entry.value;
+                        // Only log if CLS is poor (> 0.1) or in development
+                        if (cls > 0.1 || window.location.hostname === 'localhost' || window.location.protocol === 'file:') {
+                            console.log('CLS:', cls, cls > 0.1 ? '⚠️ Poor' : '✅ Good');
+                        }
                     }
                 }
             }
@@ -417,16 +609,161 @@ function initPerformanceMonitoring() {
         observer.observe({ entryTypes: ['largest-contentful-paint', 'first-input', 'layout-shift'] });
     }
     
-    // Resource timing
+    // Resource timing - only log if load time is poor or in development
     window.addEventListener('load', () => {
         const perfData = performance.getEntriesByType('navigation')[0];
         if (perfData && perfData.loadEventEnd && perfData.loadEventStart) {
             const loadTime = perfData.loadEventEnd - perfData.loadEventStart;
-            if (loadTime > 0) {
-                console.log('Page Load Time:', loadTime + 'ms');
+            // Only log if load time is poor (> 3s) or in development
+            if (loadTime > 0 && (loadTime > 3000 || window.location.hostname === 'localhost' || window.location.protocol === 'file:')) {
+                console.log('Page Load Time:', loadTime + 'ms', loadTime > 3000 ? '⚠️ Poor' : '✅ Good');
             }
         }
     });
+}
+
+// Email Management System
+function initEmailManagement() {
+    const jobSeekerBtn = document.getElementById('email-job-seeker');
+    const employerBtn = document.getElementById('email-employer');
+    
+    // Job Seeker Email Template
+    const jobSeekerEmail = {
+        to: 'info@hcc-mm.com',
+        subject: 'Job Seeker Inquiry - Hospitality Career Opportunities',
+        body: `Hello HCC Myanmar Team,
+
+I am a hospitality professional interested in career opportunities through your platform.
+
+Please provide me with information about:
+- Available job positions in Myanmar's hospitality sector
+- How to create a professional profile
+- Application process and requirements
+- Career development resources
+- Industry insights and trends
+
+My Background:
+- Experience Level: [Please specify]
+- Preferred Sectors: [Hotels/Restaurants/Travel/Events]
+- Location Preference: [Yangon/Mandalay/Other]
+- Language Skills: [English/Myanmar/Other]
+
+I look forward to hearing from you and joining Myanmar's premier hospitality career platform.
+
+Best regards,
+[Your Name]
+[Your Contact Information]`
+    };
+    
+    // Employer Email Template
+    const employerEmail = {
+        to: 'info@hcc-mm.com',
+        subject: 'Employer Partnership Inquiry - Hospitality Talent Solutions',
+        body: `Hello HCC Myanmar Team,
+
+I represent a hospitality business interested in partnering with your platform for talent acquisition.
+
+Please provide information about:
+- Employer partnership packages and pricing
+- Candidate screening and verification process
+- Platform features for employers
+- Industry-specific recruitment solutions
+- Success stories and case studies
+
+Our Organization:
+- Business Type: [Hotel/Restaurant/Travel Agency/Event Company]
+- Size: [Number of employees]
+- Locations: [Cities/Regions]
+- Current Hiring Needs: [Positions/Departments]
+- Budget Range: [Please specify]
+
+We are excited about the opportunity to connect with top hospitality talent in Myanmar.
+
+Best regards,
+[Your Name]
+[Your Title]
+[Company Name]
+[Contact Information]`
+    };
+    
+    // Create mailto URLs
+    function createMailtoURL(emailData) {
+        const params = new URLSearchParams({
+            subject: emailData.subject,
+            body: emailData.body
+        });
+        return `mailto:${emailData.to}?${params.toString()}`;
+    }
+    
+    // Event listeners for email buttons
+    if (jobSeekerBtn) {
+        jobSeekerBtn.addEventListener('click', () => {
+            const mailtoURL = createMailtoURL(jobSeekerEmail);
+            window.location.href = mailtoURL;
+            
+            // Track email interaction
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'email_click', {
+                    'email_type': 'job_seeker',
+                    'event_category': 'engagement'
+                });
+            }
+        });
+    }
+    
+    if (employerBtn) {
+        employerBtn.addEventListener('click', () => {
+            const mailtoURL = createMailtoURL(employerEmail);
+            window.location.href = mailtoURL;
+            
+            // Track email interaction
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'email_click', {
+                    'email_type': 'employer',
+                    'event_category': 'engagement'
+                });
+            }
+        });
+    }
+    
+    // Enhanced email validation and formatting
+    function validateEmailFormat(email) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    }
+    
+    // Email template customization based on user preferences
+    function customizeEmailTemplate(template, userData = {}) {
+        let customizedTemplate = template;
+        
+        // Replace placeholders with user data if available
+        Object.keys(userData).forEach(key => {
+            const placeholder = `[${key}]`;
+            customizedTemplate = customizedTemplate.replace(new RegExp(placeholder, 'g'), userData[key] || placeholder);
+        });
+        
+        return customizedTemplate;
+    }
+    
+    // Store email preferences in localStorage
+    function saveEmailPreferences(preferences) {
+        try {
+            localStorage.setItem('hccEmailPreferences', JSON.stringify(preferences));
+        } catch (error) {
+            console.warn('Could not save email preferences:', error);
+        }
+    }
+    
+    // Load email preferences from localStorage
+    function loadEmailPreferences() {
+        try {
+            const preferences = localStorage.getItem('hccEmailPreferences');
+            return preferences ? JSON.parse(preferences) : {};
+        } catch (error) {
+            console.warn('Could not load email preferences:', error);
+            return {};
+        }
+    }
 }
 
 // Initialize all functionality when DOM is loaded
@@ -440,6 +777,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initLanguageSwitcher();
     initAdvancedAccessibility();
     initPerformanceMonitoring();
+    initEmailManagement();
 });
 
 // Service Worker Registration for PWA
@@ -455,7 +793,9 @@ if ('serviceWorker' in navigator) {
                     console.log('SW registration failed: ', registrationError);
                 });
         } else {
-            console.log('Service Worker not supported in this environment (file:// protocol)');
+            // Silent handling for file:// protocol - this is expected behavior
+            // Service Workers require HTTPS or localhost for security reasons
+            // No need to log this as an error since it's expected in local file environments
         }
     });
 }
